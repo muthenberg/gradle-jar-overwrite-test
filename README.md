@@ -1,8 +1,9 @@
-# gradle-jar-overwrite-test
-This is a simple non working example for publishing a proguard JAR using a Gradle build file. It is used to get support via stackoverflow.
+# Test for Overwriting Gradle Publication JAR with Obfuscated ProGuard Jar during Publication
+This is a simple example for publishing an obfuscated Proguard JAR using Gradle and its 'publish' plugin. It is used to get support via stackoverflow.
 
-To see the problem described by this project just run `./gradlew publish`.
+The most important requirement was, that only the obfuscated Proguard JAR must be published as a substitute for the not obfuscated one. So simply adding a classifier does not solve the issue.
 
-The goal of this project is to use the Gradle publish plugin to publish a JAR file that was obfuscated by proguard as a Maven artifact.
-For this to happen the unobfuscated JAR needs to be replaced, which should be possible by providing a custom configuration.
-Unfortunately the Gradle documentation is not very clear on how to achieve this: (https://docs.gradle.org/current/userguide/publishing_customization.html)[https://docs.gradle.org/current/userguide/publishing_customization.html]
+I did ask the relevant question (https://stackoverflow.com/questions/59343095/how-to-publish-proguard-jar-as-maven-artifact-using-gradle-publish-plugin)[here].
+The final solution is based on (https://stackoverflow.com/questions/52875698/how-to-proguard-with-spring-boot-gradle-plugin)[this] thread.
+
+To see the solution in action just run `./gradlew publish`.

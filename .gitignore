@@ -21,3 +21,8 @@ gradle-app.setting
 .gradletasknamecache
 
 *.map
+
+.classpath
+.project
+.settings
+bin
