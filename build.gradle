@@ -20,35 +20,11 @@ repositories {
     jcenter()
 }
 
-configurations {
-    proguard {
-        canBeConsumed = true
-        canBeResolved = false
-
-        extendsFrom implementation, runtimeOnly
-
-        attributes {
-            attribute(Attribute.of("org.gradle.usage", String), Usage.JAVA_API)
-            attribute(Attribute.of("org.gradle.category", String), Category.LIBRARY)
-            attribute(Attribute.of("org.gradle.libraryelements", String), LibraryElements.JAR)
-            attribute(Attribute.of("org.gradle.dependency.bundling", String), Bundling.EXTERNAL)
-        }
-    }
-}
-
 dependencies {
     api 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.google.guava:guava:23.0'
     testImplementation 'junit:junit:4.12'
 }
-
-/*task extractJar(type: Copy, dependsOn: 'jar') {
-    def zipFile = file("${buildDir}/libs/${project.name}-${version}.jar")
-    def outputDir = file("${buildDir}/unpacked/")
-
-    from zipTree(zipFile)
-    into outputDir
-}*/
 
 task createObfuscated(type: proguard.gradle.ProGuardTask, dependsOn: 'jar') {
     description 'Optimizes and obfuscates the created distribution jar.'
@@ -87,45 +63,17 @@ task createObfuscated(type: proguard.gradle.ProGuardTask, dependsOn: 'jar') {
     overloadaggressively
 }
 
-/*artifacts {
-    proguard(new File(proguard.outJarFiles[0])) {
-        builtBy(proguard)
-    }
-}*/
-
-//AdhocComponentWithVariants javaComponent = (AdhocComponentWithVariants) project.components.findByName("java")
-//javaComponent.addVariantsFromConfiguration(configurations.proguard) {
-    // I have no idea what I should do here and the documentation is very confusing
-//}
-
-/*task deleteClasses(type: Delete, dependsOn: proguard) {
-    delete "${buildDir}/unpacked"
-}*/
-
 task copyObfuscated(type: Copy, dependsOn: createObfuscated) {
     from "${buildDir}/obf"
     into "${buildDir}/libs"
     include '*.jar'
 }
 
-/*task copyObfuscatedJars(type: Copy, dependsOn: 'copyObfuscatedClasses') {
-    from "${buildDir}/obfClasses"
-    into "${buildDir}/lib/"
-    include '*.jar'
-}*/
-
 task deleteObfuscated(type: Delete, dependsOn: copyObfuscated) {
     delete '${buildDir}/obf'
 }
 
 task proguard dependsOn deleteObfuscated
-
-/*task repackage(type: Zip, dependsOn: deleteObfuscated) {
-    from  "${buildDir}/unpacked"
-    entryCompression ZipEntryCompression.STORED
-    archiveName "${project.name}-${version}-obf.jar"
-    destinationDir(file("${buildDir}/libs"))
-}*/
 
 publishing {
     publications {
